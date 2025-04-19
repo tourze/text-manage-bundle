@@ -1,0 +1,20 @@
+services:
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+  Tourze\TextManageBundle\Service\:
+    resource: '../../Service/'
+
+  # Markdown解析
+  text-manage.markdown.common-extension:
+    class: League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension
+  text-manage.markdown.github-extension:
+    class: League\CommonMark\Extension\GithubFlavoredMarkdownExtension
+  League\CommonMark\Environment\Environment:
+    calls:
+      - [ 'addExtension', [ '@text-manage.markdown.common-extension' ] ]
+      - [ 'addExtension', [ '@text-manage.markdown.github-extension' ] ]
+  League\CommonMark\MarkdownConverter:
+    arguments: [ '@League\CommonMark\Environment\Environment' ]
