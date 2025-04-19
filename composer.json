@@ -1,6 +1,6 @@
 {
-  "name": "tourze/resource-manage-bundle",
-  "description": "资源管理",
+  "name": "tourze/text-manage-bundle",
+  "description": "文本格式化管理",
   "type": "symfony-bundle",
   "license": "MIT",
   "require": {
