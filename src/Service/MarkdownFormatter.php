@@ -6,7 +6,7 @@ use League\CommonMark\MarkdownConverter;
 use Symfony\Component\DependencyInjection\Attribute\AsDecorator;
 use Symfony\Component\DependencyInjection\Attribute\AutowireDecorated;
 
-#[AsDecorator(decorates: TextFormatter::class)]
+#[AsDecorator(decorates: TextFormatter::class, priority: -89)]
 class MarkdownFormatter implements TextFormatter
 {
     public function __construct(
