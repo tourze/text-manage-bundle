@@ -11,6 +11,7 @@
     "symfony/framework-bundle": "^6.4",
     "league/commonmark": "^2.6.1",
     "psr/log": "^3|^2|^1",
+    "symfony/yaml": "^6.4 || ^7.1",
     "twig/twig": "^3.13|^4.0"
   },
   "autoload": {
