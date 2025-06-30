@@ -5,7 +5,7 @@ namespace Tourze\TextManageBundle\Service;
 use Symfony\Component\DependencyInjection\Attribute\AsAlias;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
-#[AsAlias(TextFormatter::class)]
+#[AsAlias(id: TextFormatter::class)]
 #[Autoconfigure(public: true)]
 class PlainFormatter implements TextFormatter
 {

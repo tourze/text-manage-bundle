@@ -4,7 +4,7 @@ namespace Tourze\TextManageBundle\Service;
 
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag(TextFormatter::SERVICE_TAG)]
+#[AutoconfigureTag(name: TextFormatter::SERVICE_TAG)]
 interface TextFormatter
 {
     public const SERVICE_TAG = 'text.formatter';
