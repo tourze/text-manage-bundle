@@ -2,19 +2,26 @@
 
 namespace Tourze\TextManageBundle\Tests\Service;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Tourze\PHPUnitSymfonyKernelTest\AbstractIntegrationTestCase;
 use Tourze\TextManageBundle\Service\PlainFormatter;
 
-class PlainFormatterTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(PlainFormatter::class)]
+#[RunTestsInSeparateProcesses]
+final class PlainFormatterTest extends AbstractIntegrationTestCase
 {
     private PlainFormatter $formatter;
 
-    protected function setUp(): void
+    protected function onSetUp(): void
     {
-        $this->formatter = new PlainFormatter();
+        $this->formatter = self::getService(PlainFormatter::class);
     }
 
-    public function test_formatText_withPlainText_returnsOriginalText(): void
+    public function testFormatTextWithPlainTextReturnsOriginalText(): void
     {
         $text = 'Hello World';
         $result = $this->formatter->formatText($text);
@@ -22,14 +29,14 @@ class PlainFormatterTest extends TestCase
         $this->assertEquals($text, $result);
     }
 
-    public function test_formatText_withEmptyText_returnsEmptyString(): void
+    public function testFormatTextWithEmptyTextReturnsEmptyString(): void
     {
         $result = $this->formatter->formatText('');
 
         $this->assertEquals('', $result);
     }
 
-    public function test_formatText_withSpecialCharacters_returnsUnchangedText(): void
+    public function testFormatTextWithSpecialCharactersReturnsUnchangedText(): void
     {
         $text = '<div>HTML content</div>';
         $result = $this->formatter->formatText($text);
@@ -37,7 +44,7 @@ class PlainFormatterTest extends TestCase
         $this->assertEquals($text, $result);
     }
 
-    public function test_formatText_withParamsProvided_ignoresParams(): void
+    public function testFormatTextWithParamsProvidedIgnoresParams(): void
     {
         $text = 'Hello {{ name }}';
         $params = ['name' => 'John'];

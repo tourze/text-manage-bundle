@@ -1,6 +1,8 @@
 # TextManageBundle
 
-TextManageBundle 是一个 Symfony Bundle，提供文本格式化和处理的功能。
+[English](README.md) | [中文](README.zh-CN.md)
+
+TextManageBundle 是一个轻量级的 Symfony Bundle，提供文本格式化和处理的功能。
 
 ## 功能
 
@@ -80,3 +82,7 @@ $result = $textFormatter->formatText($text); // 返回纯文本，移除 HTML �
 ```bash
 ./vendor/bin/phpunit packages/text-manage-bundle/tests
 ```
+
+## License
+
+MIT

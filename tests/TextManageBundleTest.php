@@ -1,15 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\TextManageBundle\Tests;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Tourze\PHPUnitSymfonyKernelTest\AbstractBundleTestCase;
 use Tourze\TextManageBundle\TextManageBundle;
 
-class TextManageBundleTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(TextManageBundle::class)]
+#[RunTestsInSeparateProcesses]
+#[Group('skip-database-tests')]
+#[Group('skip-sqlite-tests')]
+final class TextManageBundleTest extends AbstractBundleTestCase
 {
-    public function test_instanceCanBeCreated(): void
-    {
-        $bundle = new TextManageBundle();
-        $this->assertInstanceOf(TextManageBundle::class, $bundle);
-    }
 }

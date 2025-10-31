@@ -2,30 +2,34 @@
 
 namespace Tourze\TextManageBundle\Tests\DependencyInjection;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Tourze\PHPUnitSymfonyUnitTest\AbstractDependencyInjectionExtensionTestCase;
 use Tourze\TextManageBundle\DependencyInjection\TextManageExtension;
 
-class TextManageExtensionTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(TextManageExtension::class)]
+final class TextManageExtensionTest extends AbstractDependencyInjectionExtensionTestCase
 {
-    /**
-     * @var TextManageExtension
-     */
     private TextManageExtension $extension;
 
-    /**
-     * @var ContainerBuilder
-     */
     private ContainerBuilder $container;
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->extension = new TextManageExtension();
         $this->container = new ContainerBuilder();
     }
 
-    public function test_load_loadsExtension(): void
+    public function testLoadLoadsExtension(): void
     {
+        // 设置必需的参数
+        $this->container->setParameter('kernel.environment', 'test');
+
         // 测试扩展能否正常加载而不抛出异常
         $this->extension->load([], $this->container);
 
@@ -34,7 +38,7 @@ class TextManageExtensionTest extends TestCase
         $hasTextManageServices = false;
 
         foreach ($serviceDefinitions as $id => $definition) {
-            if (is_string($id) && strpos($id, 'Tourze\TextManageBundle') === 0) {
+            if (is_string($id) && 0 === strpos($id, 'Tourze\TextManageBundle')) {
                 $hasTextManageServices = true;
                 break;
             }

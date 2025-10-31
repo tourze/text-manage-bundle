@@ -9,6 +9,9 @@ use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 #[Autoconfigure(public: true)]
 class PlainFormatter implements TextFormatter
 {
+    /**
+     * @param array<string, mixed> $params
+     */
     public function formatText(string $text, array $params = []): string
     {
         return $text;

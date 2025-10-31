@@ -2,12 +2,16 @@
 
 namespace Tourze\TextManageBundle\Service;
 
+use Monolog\Attribute\WithMonologChannel;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AsDecorator;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\DependencyInjection\Attribute\AutowireDecorated;
 use Twig\Environment;
 
 #[AsDecorator(decorates: TextFormatter::class, priority: -99)]
+#[Autoconfigure(public: true)]
+#[WithMonologChannel(channel: 'text_manage')]
 class TwigFormatter implements TextFormatter
 {
     public function __construct(
@@ -17,6 +21,9 @@ class TwigFormatter implements TextFormatter
     ) {
     }
 
+    /**
+     * @param array<string, mixed> $params
+     */
     public function formatText(string $text, array $params = []): string
     {
         $text = $this->inner->formatText($text, $params);

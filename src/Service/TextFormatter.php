@@ -11,6 +11,8 @@ interface TextFormatter
 
     /**
      * 格式化文本
+     *
+     * @param array<string, mixed> $params
      */
     public function formatText(string $text, array $params = []): string;
 }

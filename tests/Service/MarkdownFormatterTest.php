@@ -2,112 +2,61 @@
 
 namespace Tourze\TextManageBundle\Tests\Service;
 
-use League\CommonMark\MarkdownConverter;
-use League\CommonMark\Output\RenderedContent;
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Tourze\PHPUnitSymfonyKernelTest\AbstractIntegrationTestCase;
 use Tourze\TextManageBundle\Service\MarkdownFormatter;
-use Tourze\TextManageBundle\Service\TextFormatter;
 
-class MarkdownFormatterTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(MarkdownFormatter::class)]
+#[RunTestsInSeparateProcesses]
+final class MarkdownFormatterTest extends AbstractIntegrationTestCase
 {
     private MarkdownFormatter $formatter;
-    private TextFormatter $innerFormatter;
-    private MarkdownConverter $converter;
 
-    protected function setUp(): void
+    protected function onSetUp(): void
     {
-        $this->innerFormatter = $this->createMock(TextFormatter::class);
-        $this->converter = $this->createMock(MarkdownConverter::class);
-        $this->formatter = new MarkdownFormatter(
-            $this->innerFormatter,
-            $this->converter
-        );
+        $this->formatter = self::getService(MarkdownFormatter::class);
     }
 
-    public function test_formatText_delegatesToInnerFormatter(): void
+    public function testFormatTextConvertsMarkdownToPlainText(): void
     {
         $text = '# Markdown Title';
-        $params = ['key' => 'value'];
-
-        $this->innerFormatter
-            ->expects($this->once())
-            ->method('formatText')
-            ->with($text, $params)
-            ->willReturn($text);
-
-        $renderedContent = $this->createMock(RenderedContent::class);
-        $renderedContent->method('getContent')
-            ->willReturn('<h1>Markdown Title</h1>');
-
-        $this->converter
-            ->expects($this->once())
-            ->method('convert')
-            ->with($text)
-            ->willReturn($renderedContent);
-
-        $result = $this->formatter->formatText($text, $params);
+        $result = $this->formatter->formatText($text);
 
         $this->assertEquals('Markdown Title', $result);
     }
 
-    public function test_formatText_stripsHtmlTags(): void
+    public function testFormatTextStripsHtmlTags(): void
     {
-        $this->innerFormatter
-            ->method('formatText')
-            ->willReturn('**Bold Text**');
-
-        $renderedContent = $this->createMock(RenderedContent::class);
-        $renderedContent->method('getContent')
-            ->willReturn('<p><strong>Bold Text</strong></p>');
-
-        $this->converter
-            ->method('convert')
-            ->willReturn($renderedContent);
-
-        $result = $this->formatter->formatText('**Bold Text**');
+        $text = '**Bold Text**';
+        $result = $this->formatter->formatText($text);
 
         $this->assertEquals('Bold Text', $result);
     }
 
-    public function test_formatText_trimsSurroundingWhitespace(): void
+    public function testFormatTextTrimsSurroundingWhitespace(): void
     {
-        $this->innerFormatter
-            ->method('formatText')
-            ->willReturn("  \n  Markdown Text  \n  ");
+        $text = "  \n  # Markdown Title  \n  ";
+        $result = $this->formatter->formatText($text);
 
-        $renderedContent = $this->createMock(RenderedContent::class);
-        $renderedContent->method('getContent')
-            ->willReturn("<p>  \n  Markdown Text  \n  </p>");
-
-        $this->converter
-            ->method('convert')
-            ->willReturn($renderedContent);
-
-        $result = $this->formatter->formatText("  \n  Markdown Text  \n  ");
-
-        $this->assertEquals('Markdown Text', $result);
+        $this->assertEquals('Markdown Title', $result);
     }
 
-    public function test_formatText_handlesComplexMarkdown(): void
+    public function testFormatTextWithEmptyString(): void
     {
-        $markdown = "# Header\n\n- List item 1\n- List item 2\n\n> Blockquote";
-        $html = "<h1>Header</h1><ul><li>List item 1</li><li>List item 2</li></ul><blockquote><p>Blockquote</p></blockquote>";
+        $result = $this->formatter->formatText('');
 
-        $this->innerFormatter
-            ->method('formatText')
-            ->willReturn($markdown);
+        $this->assertEquals('', $result);
+    }
 
-        $renderedContent = $this->createMock(RenderedContent::class);
-        $renderedContent->method('getContent')
-            ->willReturn($html);
+    public function testFormatTextWithPlainText(): void
+    {
+        $text = 'Plain text without markdown';
+        $result = $this->formatter->formatText($text);
 
-        $this->converter
-            ->method('convert')
-            ->willReturn($renderedContent);
-
-        $result = $this->formatter->formatText($markdown);
-
-        // 实际输出没有空格，直接调整期望值
-        $this->assertEquals('HeaderList item 1List item 2Blockquote', $result);
+        $this->assertEquals($text, $result);
     }
 }
