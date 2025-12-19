@@ -4,7 +4,7 @@ namespace Tourze\TextManageBundle\DependencyInjection;
 
 use Tourze\SymfonyDependencyServiceLoader\AutoExtension;
 
-class TextManageExtension extends AutoExtension
+final class TextManageExtension extends AutoExtension
 {
     protected function getConfigDir(): string
     {
